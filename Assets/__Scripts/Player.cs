@@ -155,16 +155,14 @@ public class Player
 
                 // Set the localPosition and rotation of the ith card in the hand
                 hand[i].MoveTo(pos, rotQ); // Tell CardBartok to interpolate
-                hand[i].state = CBState.toHand;
                 // After the move, CardBartok will set the state to CBState.hand
-
+                hand[i].state = CBState.toHand;
                 /* <= This begins a multiline comment
                 hand[i].transform.localPosition = pos;
                 hand[i].transform.rotation = rotQ;
                 hand[i].state = CBState.hand; 
                 This ends the multiline comment => */
 
-                hand[i].faceUp = (type == PlayerType.human);
 
                 // Set the SortOrder of the cards so that they overlap properly
                 hand[i].eventualSortOrder = i * 4;

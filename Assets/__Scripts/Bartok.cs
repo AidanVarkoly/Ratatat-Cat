@@ -28,6 +28,7 @@ public class Bartok : MonoBehaviour {
     public float handFanDegrees = 10f;
     public int numStartingCards = 4;
     public float drawTimeStagger = 0.1f;
+    public float fliptime = 0.1f;
 
     [Header("Set Dynamically")]
     public Deck deck;
