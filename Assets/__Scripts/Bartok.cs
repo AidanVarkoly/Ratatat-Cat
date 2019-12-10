@@ -20,6 +20,8 @@ public class Bartok : MonoBehaviour {
     static bool PowerCard_DrawTwo_bool2 = false;
     static bool PowerCard_Peek_bool = false;
     static bool PowerCard_Swap_bool = false;
+    bool lastround = false;
+    private Player player;
 
     [Header("Set in Inspector")]
     public TextAsset deckXML;
@@ -29,6 +31,7 @@ public class Bartok : MonoBehaviour {
     public int numStartingCards = 4;
     public float drawTimeStagger = 0.1f;
     public float fliptime = 0.1f;
+    public int min = 50;
 
     [Header("Set Dynamically")]
     public Deck deck;
@@ -59,6 +62,7 @@ public class Bartok : MonoBehaviour {
 
         drawPile = UpgradeCardsList(deck.cards);
         LayoutGame();
+
     }
 
     List<CardBartok> UpgradeCardsList(List<Card> lCD)
@@ -145,13 +149,21 @@ public class Bartok : MonoBehaviour {
     {
         // You sometimes want to have reporting of method calls like this
         Utils.tr("Bartok:CBCallback()", cb.name);
-        StartGame(); // Start the Game
     }
-
     public void StartGame()
     {
         // Pick the player to the left of the human to go first.
         PassTurn(1);
+    }
+    public void FlipUpCards()
+    {
+        players[0].hand[0].faceUp = true;
+        players[0].hand[3].faceUp = true;
+    }
+    public void FlipDownCards()
+    {
+        players[0].hand[0].faceUp = false;
+        players[0].hand[3].faceUp = false;
     }
 
     public void PassTurn(int num = -1)
@@ -166,15 +178,17 @@ public class Bartok : MonoBehaviour {
         if(CURRENT_PLAYER != null)
         {
             lastPlayerNum = CURRENT_PLAYER.playerNum;
-            // Check for Game Over and need to reshuffle discards
-            if (CheckGameOver())
-            {
-                return;
-            }
         }
         if (num == 0)
         {
             k += 1;
+        }
+        if (lastround == true)
+        {
+            if(CURRENT_PLAYER != null)
+            {
+                CompareTotalScore();
+            }
         }
         CURRENT_PLAYER = players[num];
         phase = TurnPhase.pre;
@@ -190,31 +204,26 @@ public class Bartok : MonoBehaviour {
         }
     }
 
-    public bool CheckGameOver()
+    public void Ratatcat()
+    { 
+        foreach(Player player in players)
+        {
+            player.TotalCardScore();
+        }
+        lastround = true;
+    }
+    public void CompareTotalScore()
     {
-        // See if we need to reshuffle the discard pile into the draw pile
-        if(drawPile.Count == 0)
+        foreach (Player hand in players)
         {
-            List<Card> cards = new List<Card>();
-            foreach (CardBartok cb in discardPile)
+            if(hand.score < min)
             {
-                cards.Add(cb);
+                min = hand.score;
             }
-            discardPile.Clear();
-            Deck.Shuffle(ref cards);
-            drawPile = UpgradeCardsList(cards);
-            ArrangeDrawPile();
         }
-        
-        // Check to see if the current player has won
-        if(CURRENT_PLAYER.hand.Length == 0)
-        {
-            // The player that just played has won!
-            phase = TurnPhase.gameOver;
-            Invoke("RestartGame", 1);
-            return (true);
-        }
-        return (false);
+        phase = TurnPhase.gameOver;
+        Invoke("RestartGame", 2);
+        lastround = false;
     }
 
     public void RestartGame()

@@ -17,6 +17,7 @@ public class Player
     public int playerNum;
     public SlotDef handSlotDef;
     public CardBartok[] hand; // The cards in this player's hand
+    public int score = 0;
 
     // Add a card to the hand
     public CardBartok AddCard(CardBartok eCB)
@@ -72,6 +73,28 @@ public class Player
         }
         FanHand();
         return (cb);
+    }
+    public void TotalCardScore()
+    {
+        foreach (Card card in hand)
+        {
+            if (card.suit == "N")
+            {
+                score += card.def.rank;
+            }
+            if (card.suit == "C")
+            {
+                score += card.rank;
+            }
+            if (card.suit == "P")
+            {
+
+            }
+            for (int i = 0; i < hand.Length; i++)
+            {
+                hand[i].faceUp = true;
+            }
+        }
     }
 
     public void FanHand()

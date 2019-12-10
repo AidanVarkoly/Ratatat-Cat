@@ -5,10 +5,12 @@ using UnityEngine.UI; // Required for the uGUI classes like Text
 
 public class RoundResultUI : MonoBehaviour {
     private Text txt;
+    private Bartok bartok;
 
     private void Awake()
     {
         txt = GetComponent<Text>();
+        bartok = GetComponent<Bartok>();
         txt.text = "";
     }
 
@@ -20,14 +22,17 @@ public class RoundResultUI : MonoBehaviour {
             return;
         }
         // We only get here if the game is over
-        Player cP = Bartok.CURRENT_PLAYER;
-        if (cP == null || cP.type == PlayerType.human)
+        if (bartok.players[1].score == bartok.min)
         {
-            txt.text = "";
+            txt.text = "Player " + "1" + " won";
         }
-        else
+        if (bartok.players[2].score == bartok.min)
         {
-            txt.text = "Player " + (cP.playerNum) + " won";
+            txt.text = "Player " + "2" + " won";
+        }
+        if (bartok.players[3].score == bartok.min)
+        {
+            txt.text = "Player " + "3" + " won";
         }
     }
 }

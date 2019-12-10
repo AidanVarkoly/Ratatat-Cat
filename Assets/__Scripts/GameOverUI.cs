@@ -5,10 +5,12 @@ using UnityEngine.UI; // Required for the uGUI classes like Text
 
 public class GameOverUI : MonoBehaviour {
     private Text txt;
+    private Bartok bartok;
 
     private void Awake()
     {
         txt = GetComponent<Text>();
+        bartok = GetComponent<Bartok>();
         txt.text = "";
     }
 
@@ -20,8 +22,7 @@ public class GameOverUI : MonoBehaviour {
             return;
         }
         // We only get here if the game is over
-        if (Bartok.CURRENT_PLAYER == null) return;
-        if (Bartok.CURRENT_PLAYER.type == PlayerType.human)
+        if (bartok.players[0].score == bartok.min )
         {
             txt.text = "You won!";
         }
