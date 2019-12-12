@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Card : MonoBehaviour {
+public class Card : MonoBehaviour
+{
     [Header("Set Dynamically")]
     public string suit; // Suit of the Card (C,D,H, or S)
     public int rank; // Rank of the Card (1-14)
@@ -42,7 +43,7 @@ public class Card : MonoBehaviour {
     {
         PopulateSpriteRenderers();
 
-        foreach(SpriteRenderer tSR in spriteRenderers)
+        foreach (SpriteRenderer tSR in spriteRenderers)
         {
             tSR.sortingLayerName = tSLN;
         }

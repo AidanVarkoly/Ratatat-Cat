@@ -13,7 +13,9 @@ public enum CBState
     target,
     discard,
     to,
-    idle
+    idle,
+    selected,
+    activePC
 }
 
 public class CardBartok : Card {
@@ -22,6 +24,8 @@ public class CardBartok : Card {
     static public string MOVE_EASING = Easing.InOut;
     static public float CARD_HEIGHT = 3.5f;
     static public float CARD_WIDTH = 2f;
+    //CardBartok secondCard = null;
+    //Player playerforcard2 = null;
 
     [Header("Set Dynamically: CardBartok")]
     public CBState state = CBState.drawpile;
@@ -32,6 +36,7 @@ public class CardBartok : Card {
     public float timeStart, timeDuration;
     public int eventualSortOrder;
     public string eventualSortLayer;
+    public int playerHandSlot = -1;
 
     // When the card is done moving, it will call reportFinishTo.SendMessage()
     public GameObject reportFinishTo = null;
@@ -62,6 +67,11 @@ public class CardBartok : Card {
     }
 
     public void MoveTo(Vector3 ePos)
+    {
+        MoveTo(ePos, Quaternion.identity);
+    }
+
+    public void MoveTo_2Cards(Vector3 ePos,CardBartok secondCard,Player playerFor2ndCard)
     {
         MoveTo(ePos, Quaternion.identity);
     }
@@ -106,10 +116,9 @@ public class CardBartok : Card {
                     }
                     else if(callbackPlayer != null)
                     {
-                        // If there's a callback Player
-                        // Call CBCallback directly on the Player
                         callbackPlayer.CBCallback(this);
                         callbackPlayer = null;
+                        
                     }
                     else
                     {
